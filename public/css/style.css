@@ -15,7 +15,7 @@ body{
 .wrapper{
     position: relative;
     width: 750px;
-    height: 450px;
+    height: 550px;
     background: #14213D;
     border: 2px solid #DAA520;
     box-shadow: 0 0 25px #DAA520;
@@ -48,8 +48,8 @@ body{
 .form-box .input-box{
     position: relative;
     width: 100%;
-    height: 50px;
-    margin: 20px 0;
+    height: 30px;
+    margin: 50px 0;
 }
 
 .form-box input{
@@ -100,6 +100,16 @@ body{
 .input-box input:focus~i,
 .input-box input:valid~i {
     color: #DAA520;
+}
+
+
+/* Este viene del JS div.className = "text-danger" */
+.errorsMessage {
+    color: red;
+    margin-top: 5px;
+    font-size: 14px;
+    min-height: 18px; /* altura mínima para reservar espacio aunque no haya texto */
+    position: static; /* quita el absolute para que ocupe espacio real */
 }
 
 .btn{
@@ -158,3 +168,4 @@ body{
     font-size: 16px;
     color: #fff;
 }
+

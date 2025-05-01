@@ -10,18 +10,20 @@
 <body>
     <div class="wrapper">
         <div class="form-box login">
-            <form action="{{ route('register')}}">
+            <form action="{{ route('validationLogin')}}" method="POST">
+                @csrf
                 <h2>Inicia sesión</h2>
                 <div class="input-box">
-                    <input type="text" required>
-                    <label>Nombre de usuario</label>
-                    <i class='bx bxs-user'></i>
+                    <input name="email" type="text">
+                    <label>Email</label>
+                    <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" required>
+                    <input name="password" type="password">
                     <label>Contraseña</label>
                     <i class='bx bxs-lock-alt'></i>
                 </div>
+                <div class="error">{{ \Session::get('message') }}</div>
                 <div class="logreg-link">
                     <p>¿No tienes cuenta? <a href="/register">Registrate</a></p>
                 </div>

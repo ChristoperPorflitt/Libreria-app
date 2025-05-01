@@ -1,64 +1,66 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function login()
+
+    public function validationRegister(Request $request)
     {
-        return view("login");
+        // Está validado desde el front también
+        $request->validate([
+            'name' => 'required|min:4',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8'
+        ]);
+
+        $user = new User();
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        return redirect(route('login'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function register()
+    public function validationLogin(Request $request)
     {
-        return view("register");
+        // Falta la validación de los datos
+        $credetials = [
+            "email" => $request->email,  // Como dato, Laravel utiliza el email para iniciar la sesión
+            "password" => $request->password,
+        ];
+
+        
+        if($request->has('remember')){
+            $remember = true;
+        } else {
+            $remember = false;
+        }
+
+        if(Auth::attempt($credetials, $remember)) {
+            
+            $request->session()->regenerate();
+            return redirect(route('privada'));
+        } else {
+            return redirect(route('privada')); //Buscar como añadir mensajes
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function logout(Request $request)
     {
-        //
-    }
+        Auth::logout();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect(route('login'));
     }
 }
